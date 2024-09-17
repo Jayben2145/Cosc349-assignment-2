@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+  h1 Admin - Manage Properties
+  a(href='/admin/properties/add', class='add-new-button') Add New Property
+
+  table
+    thead
+      tr
+        th Title
+        th Price
+        th Displayed
+        th Actions
+    tbody
+      each property in properties
+        tr
+          td= property.title
+          td $#{property.price}
+          td= property.display ? 'Yes' : 'No'
+          td
+            a(href=`/admin/properties/${property.id}/edit`, class='edit-button') Edit
+            form(action=`/admin/properties/${property.id}/delete`, method='POST', style='display:inline;')
+              button(type='submit', class='delete-button') Delete
+

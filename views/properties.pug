@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  div.container
+    h1 Property Listings
+    if properties.length > 0
+      each property in properties
+        div.property-details(style="text-align: center;")
+          h2= property.title
+          
+          // Property photo (if applicable)
+          if property.photo
+            img(src=property.photo, alt=property.title, style="width: 66%; margin: 10px 0;")
+
+          // Details section
+          div.details-section
+            p
+              strong Price: 
+              |  $#{property.price}
+            p
+              strong Location: 
+              |  #{property.location}
+
+          // Link to the full property details page
+          a(href=`/properties/${property.id}`) View Details
+    else
+      p No properties available.

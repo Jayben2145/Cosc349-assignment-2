@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  h1 Contact Us
+
+  // Office Location (Embed Google Maps)
+  iframe(
+    width="600", height="450", style="border:0",
+    loading="lazy", allowfullscreen, referrerpolicy="no-referrer-when-downgrade",
+    src=`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_API_KEY}&q=Office+Address`
+  )
+
+  form(action="/contact", method="POST")
+    label(for="name") Name:
+    input(type="text", name="name", required)
+
+    label(for="email") Email:
+    input(type="email", name="email", required)
+
+    label(for="subject") Subject:
+    input(type="text", name="subject", required)
+
+    label(for="message") Message:
+    textarea(name="message", required)
+
+    button(type="submit") Submit

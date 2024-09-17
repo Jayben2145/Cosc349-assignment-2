@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+  h1 Manage Buyer Specifications
+
+  table
+    thead
+      tr
+        th Name
+        th Phone
+        th Email
+        th Area Wanted
+        th Price Range
+        th Message
+        th Contacted
+        th Actions
+    tbody
+      each buyerSpec in buyerSpecifications
+        tr
+          td= buyerSpec.name
+          td= buyerSpec.phone
+          td= buyerSpec.email
+          td= buyerSpec.areaWanted
+          td= buyerSpec.priceRange
+          td= buyerSpec.message
+          td= buyerSpec.contacted ? 'Yes' : 'No'
+          td
+            form(action=`/admin/buyer-specifications/${buyerSpec.id}/contacted`, method="POST")
+              button(type="submit") Mark as Contacted
+            form(action=`/admin/buyer-specifications/${buyerSpec.id}/delete`, method="POST")
+              button(type="submit") Delete

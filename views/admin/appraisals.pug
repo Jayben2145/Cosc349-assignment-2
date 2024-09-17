@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  h1 Manage Appraisals
+
+  table
+    thead
+      tr
+        th Name
+        th Phone
+        th Email
+        th Address
+        th Message
+        th Contacted
+        th Actions
+    tbody
+      each appraisal in appraisals
+        tr
+          td= appraisal.name
+          td= appraisal.phone
+          td= appraisal.email
+          td= appraisal.address
+          td= appraisal.message
+          td= appraisal.contacted ? 'Yes' : 'No'
+          td
+            form(action=`/admin/appraisals/${appraisal.id}/contacted`, method="POST")
+              button(type="submit") Mark as Contacted
+            form(action=`/admin/appraisals/${appraisal.id}/delete`, method="POST")
+              button(type="submit") Delete

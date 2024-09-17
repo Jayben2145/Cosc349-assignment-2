@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 Buyer Specifications
+
+  form(action="/buyer-specifications", method="POST")
+    label(for="name") Name:
+    input(type="text", name="name", required)
+
+    label(for="phone") Phone:
+    input(type="text", name="phone", required)
+
+    label(for="email") Email:
+    input(type="email", name="email", required)
+
+    label(for="areaWanted") Area Wanted:
+    input(type="text", name="areaWanted", required)
+
+    label(for="priceRange") Price Range:
+    select(name="priceRange", required)
+      option(value="$0 - $100,000") $0 - $100,000
+      option(value="$100,001 - $200,000") $100,001 - $200,000
+      //- Add more options as needed
+
+    label(for="message") Message:
+    textarea(name="message", required)
+
+    button(type="submit") Submit

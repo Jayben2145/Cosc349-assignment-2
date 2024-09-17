@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+  h1 Edit Property
+
+  form(action=`/admin/properties/${property.id}/edit`, method="POST", enctype="multipart/form-data")
+    label(for="title") Title:
+    input(type="text", name="title", value=property.title, required)
+
+    label(for="description") Description:
+    textarea(name="description")= property.description
+
+    label(for="price") Price:
+    input(type="number", name="price", value=property.price, required)
+
+    label(for="location") Location:
+    input(type="text", name="location", value=property.location, required)
+
+    label(for="display") Display:
+    select(name="display")
+      option(value="true", selected=property.display) Yes
+      option(value="false", selected=!property.display) No
+
+    label(for="notes") Notes:
+    textarea(name="notes")= property.notes
+
+    label(for="photos") Photos:
+    input(type="file", name="photos", multiple)
+
+    button(type="submit") Update Property

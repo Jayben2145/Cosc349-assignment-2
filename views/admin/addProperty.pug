@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+  h1 Add New Property
+
+  form(action="/admin/properties/add", method="POST", enctype="multipart/form-data")
+    label(for="title") Title:
+    input(type="text", name="title", required)
+
+    label(for="description") Description:
+    textarea(name="description")
+
+    label(for="price") Price:
+    input(type="number", name="price", required)
+
+    label(for="location") Location:
+    input(type="text", name="location", required)
+
+    label(for="display") Display:
+    select(name="display")
+      option(value="true") Yes
+      option(value="false") No
+
+    label(for="notes") Notes:
+    textarea(name="notes")
+
+    label(for="photos") Photos:
+    input(type="file", name="photos", multiple)
+
+    button(type="submit") Add Property

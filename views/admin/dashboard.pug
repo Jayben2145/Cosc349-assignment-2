@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+  div.admin-container
+    h1 Admin Dashboard
+
+    ul.admin-menu
+      li
+        a(href='/admin/properties') Manage Properties
+      li
+        a(href='/admin/appraisals') Manage Appraisals
+      li
+        a(href='/admin/buyer-specifications') Manage Buyer Specifications
+      li
+        a(href='/admin/contacts') Manage Contact Requests
+
+    // Add a logout button
+    p
+      a(href="/logout", class="logout-button") Logout

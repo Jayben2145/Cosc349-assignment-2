@@ -1,0 +1,39 @@
+extends layout
+block content
+  script(src="/scripts.js")
+  div.container
+    // Property Title (centered)
+    h1(style="text-align: center;")= property.title
+
+    // Map Element (2/3 screen width, center-aligned)
+    div.map-container(style="width: 66%; margin: 0 auto;")
+      iframe(
+        width="100%", height="400", style="border:0",
+        loading="lazy", allowfullscreen, referrerpolicy="no-referrer-when-downgrade",
+        src=`https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_API_KEY}&q=${property.latitude},${property.longitude}`
+      )
+
+    // Photo Carousel (2/3 screen width, center-aligned)
+    div.photo-carousel-container(style="width: 66%; margin: 20px auto; position: relative;")
+      if images.length > 0
+        button.left-arrow(style="position: absolute; left: 0; top: 50%; transform: translateY(-50%);") &#8249;
+        div.carousel
+          each image, index in images
+            img(src=image.imageUrl, alt='Property Image', class=(index === 0 ? 'active' : ''), style="width: 100%;")
+        button.right-arrow(style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);") &#8250;
+      else
+        p No images available.
+
+    // Property Details Section
+    div.details-section(style="text-align: center; margin-top: 30px;")
+      h2 Details
+      p
+        strong Price: 
+        |  $#{property.price}
+      p
+        strong Location: 
+        |  #{property.location}
+      if property.notes
+        p
+          strong Notes: 
+          |  #{property.notes}
