@@ -98,7 +98,7 @@ router.get('/:id/edit', async (req, res) => {
 
 router.post('/:id/edit', upload.array('photos', 10), async (req, res) => {
   const { title, description, price, location, display, notes } = req.body;
-  const GOOGLE_API_KEY = 'AIzaSyADRTxHN9jOFcED8b58dIFZWdfUMVe08Zg';
+  const GOOGLE_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
   try {
     // Make a request to the Geocoding API to get the coordinates

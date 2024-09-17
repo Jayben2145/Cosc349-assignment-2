@@ -1,38 +1,80 @@
-CREATE TABLE Properties (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  description TEXT,
-  price DECIMAL(10,2) NOT NULL,
-  location VARCHAR(255) NOT NULL,
-  latitude DECIMAL(9,6),
-  longitude DECIMAL(9,6),
-  display BOOLEAN DEFAULT FALSE,
-  notes TEXT,
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- Drop existing tables if they exist (for development purposes)
+DROP TABLE IF EXISTS `PropertyImages`;
+DROP TABLE IF EXISTS `Properties`;
+DROP TABLE IF EXISTS `Appraisals`;
+DROP TABLE IF EXISTS `BuyerSpecifications`;
+DROP TABLE IF EXISTS `Contacts`;
+DROP TABLE IF EXISTS `Admins`;
+
+-- Table for storing properties
+CREATE TABLE `Properties` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `title` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `price` DECIMAL(10, 2) NOT NULL,
+    `location` VARCHAR(255) NOT NULL,
+    `latitude` DECIMAL(9, 6), -- latitude for map location
+    `longitude` DECIMAL(9, 6), -- longitude for map location
+    `display` BOOLEAN DEFAULT TRUE, -- flag for displaying property
+    `notes` TEXT, -- additional notes about the property
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-CREATE TABLE PropertyImages (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  propertyId INT NOT NULL,
-  imageUrl VARCHAR(255) NOT NULL,
-  FOREIGN KEY (propertyId) REFERENCES Properties(id)
+
+-- Table for storing images related to properties
+CREATE TABLE `PropertyImages` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `propertyId` INT NOT NULL,
+    `imageUrl` VARCHAR(255) NOT NULL,
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`propertyId`) REFERENCES `Properties`(`id`) ON DELETE CASCADE
 );
-CREATE TABLE Appraisals (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  phone VARCHAR(20) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  address VARCHAR(255) NOT NULL,
-  message TEXT NOT NULL,
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+-- Table for storing appraisal requests
+CREATE TABLE `Appraisals` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(20) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `address` VARCHAR(255) NOT NULL,
+    `message` TEXT NOT NULL,
+    `contacted` BOOLEAN DEFAULT FALSE, -- flag to mark as contacted
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-CREATE TABLE BuyerSpecifications (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  phone VARCHAR(20) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  areaWanted VARCHAR(255) NOT NULL,
-  priceRange VARCHAR(50) NOT NULL,
-  message TEXT NOT NULL,
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+-- Table for storing buyer specifications
+CREATE TABLE `BuyerSpecifications` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(20) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `areaWanted` VARCHAR(255) NOT NULL,
+    `priceRange` VARCHAR(100) NOT NULL,
+    `message` TEXT NOT NULL,
+    `contacted` BOOLEAN DEFAULT FALSE, -- flag to mark as contacted
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Table for storing contact requests
+CREATE TABLE `Contacts` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `subject` VARCHAR(255) NOT NULL,
+    `message` TEXT NOT NULL,
+    `contacted` BOOLEAN DEFAULT FALSE, -- flag to mark as contacted
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Table for storing admin users
+CREATE TABLE `Admins` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `username` VARCHAR(255) NOT NULL UNIQUE,
+    `passwordHash` VARCHAR(255) NOT NULL, -- password stored as a hash
+    `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
