@@ -40,6 +40,10 @@ app.use((req, res, next) => {
 const loginRouter = require('./routes/login');  // Ensure the correct path to login.js
 app.use('/', loginRouter);
 
+app.get('/', (req, res) => {
+    res.redirect('/admin');  // Redirects to the admin dashboard
+  });
+
 // Admin routes
 const adminRouter = require('./routes/admin/index');
 app.use('/admin', adminRouter);
