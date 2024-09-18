@@ -9,17 +9,19 @@ html
       nav.navbar
         ul.navbar-list
           li.navbar-item
-            a(href='/properties') Properties
+            a(href=`${NON_ADMIN_URL}/properties`) Properties
           li.navbar-item
-            a(href='/') Jachary Joseph
+            a(href=`${NON_ADMIN_URL}/`) Jachary Joseph
           li.navbar-item.dropdown
             a(href='#') Contact
             ul.dropdown-content
               li
-                a(href='/request-appraisal') Request Appraisal
+                a(href=`${NON_ADMIN_URL}/request-appraisal`) Request Appraisal
               li
-                a(href='/buyer-specifications') Buyer Specs
+                a(href=`${NON_ADMIN_URL}/buyer-specifications`) Buyer Specs
               li
-                a(href='/contact') Contact Him
+                a(href=`${NON_ADMIN_URL}/contact`) Contact Him
+
     block content
+
     include partials/footer

@@ -1,37 +1,52 @@
-// admin.js
+// admin.js (for admin routes)
+require('dotenv').config();
 const express = require('express');
-const router = express.Router();
+const bodyParser = require('body-parser');
+const path = require('path');
+const session = require('express-session');
+const { sequelize } = require('./models');
 
-// Sub-routes for different admin sections
-const propertiesRouter = require('./routes/admin/properties');
-const appraisalsRouter = require('./routes/admin/appraisals');
-const buyerSpecsRouter = require('./routes/admin/buyerSpecifications');
-const contactsRouter = require('./routes/admin/contacts');
+const app = express();
 
-// Middleware to check if user is authenticated
-function checkAuth(req, res, next) {
-  if (req.session.isAuthenticated) {
-    next(); // User is authenticated, proceed to the next function
-  } else {
-    res.redirect('/login'); // Redirect to login if not authenticated
-  }
-}
+// Set view engine
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
-// Admin dashboard (protected)
-router.get('/', checkAuth, (req, res) => {
-  res.render('admin/dashboard', { title: 'Admin Dashboard' });
+// Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res, next) => {
+    res.locals.NON_ADMIN_URL = process.env.NON_ADMIN_URL;
+    res.locals.ADMIN_URL = process.env.ADMIN_URL;
+    next();
+  });
+  
+
+// Session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
+}));
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isAuthenticated;
+  next();
 });
 
-// Routes for properties management
-router.use('/properties', checkAuth, propertiesRouter);
+// Include the login routes
+const loginRouter = require('./routes/login');  // Ensure the correct path to login.js
+app.use('/', loginRouter);
 
-// Routes for appraisal requests
-router.use('/appraisals', checkAuth, appraisalsRouter);
+// Admin routes
+const adminRouter = require('./routes/admin/index');
+app.use('/admin', adminRouter);
 
-// Routes for buyer specifications
-router.use('/buyer-specifications', checkAuth, buyerSpecsRouter);
-
-// Routes for contact requests
-router.use('/contacts', checkAuth, contactsRouter);
-
-module.exports = router;
+// Sync database and start server
+sequelize.sync().then(() => {
+  app.listen(3000, () => {
+    console.log('Admin server started on http://localhost:4000');
+  });
+});
