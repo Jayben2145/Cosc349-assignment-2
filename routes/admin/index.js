@@ -18,7 +18,7 @@ function checkAuth(req, res, next) {
 
 // Admin dashboard
 router.get('/', checkAuth, (req, res) => {
-  res.render('admin/dashboard'); // Render admin dashboard
+  res.render('/dashboard'); // Render admin dashboard
 });
 
 // Routes for managing properties
