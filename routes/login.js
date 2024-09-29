@@ -26,32 +26,32 @@ router.post('/', async (req, res) => {
   try {
     // Authenticate with Cognito
     const data = await cognito.initiateAuth(params).promise();
-    console.log("Auth response from Cognito:", data);
+    console.log("Auth response from Cognito:", JSON.stringify(data, null, 2));
 
     // Check for NEW_PASSWORD_REQUIRED challenge
     if (data.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
       console.log("New password required for user:", username);
-      
+
       // Save the session for the next step
       req.session.challengeSession = data.Session;
       req.session.username = username;
 
       console.log("Challenge Session stored in session:", req.session.challengeSession);
-      
+
       // Render the new password page
       res.render('newPassword', { username });
     } else {
       // User successfully authenticated
       console.log("Authentication successful! ID Token:", data.AuthenticationResult.IdToken);
-      
+
       const idToken = data.AuthenticationResult.IdToken;
       req.session.isAuthenticated = true;
       req.session.idToken = idToken;
-      
+
       res.redirect('/admin');
     }
   } catch (error) {
-    console.error('Error authenticating:', error);
+    console.error('Error authenticating:', JSON.stringify(error, null, 2));
     res.render('login', { error: 'Invalid username or password' });
   }
 });
@@ -76,8 +76,8 @@ router.post('/new-password', async (req, res) => {
   try {
     // Respond to the password change challenge
     const data = await cognito.respondToAuthChallenge(params).promise();
-    
-    console.log("New password response from Cognito:", data);
+
+    console.log("New password response from Cognito:", JSON.stringify(data, null, 2));
 
     // Successfully authenticated with new password
     const idToken = data.AuthenticationResult.IdToken;
@@ -85,10 +85,10 @@ router.post('/new-password', async (req, res) => {
     req.session.idToken = idToken;
 
     console.log("User successfully authenticated with new password. Redirecting to admin.");
-    
+
     res.redirect('/admin');
   } catch (error) {
-    console.error('Error setting new password:', error);
+    console.error('Error setting new password:', JSON.stringify(error, null, 2));
     res.render('newPassword', { error: 'Could not set new password' });
   }
 });
@@ -96,7 +96,7 @@ router.post('/new-password', async (req, res) => {
 // Handle logout
 router.get('/logout', (req, res) => {
   console.log("Logging out user");
-  
+
   req.session.isAuthenticated = false;
   req.session.idToken = null;
   res.redirect('/login');
