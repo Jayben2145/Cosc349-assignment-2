@@ -1,4 +1,3 @@
-// admin.js (for admin routes)
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -25,24 +24,12 @@ app.use(session({
   cookie: { secure: false }
 }));
 
-app.use((req, res, next) => {
-  res.locals.NON_ADMIN_URL = process.env.NON_ADMIN_URL;
-  res.locals.ADMIN_URL = process.env.ADMIN_URL;
-  res.locals.isAuthenticated = req.session.isAuthenticated;
-  next();
-});
-
-// Redirect root to login page
-app.get('/', (req, res) => {
-  res.redirect('/login');
-});
-
-// **Login route**
+// Render login page before auth checks
 const loginRouter = require('./routes/login');
-app.use('/', loginRouter);  // Make sure all login routes are included
+app.use('/login', loginRouter);
 
-// **Important:** Apply checkAuth after defining routes that should be accessible without authentication
-app.use(checkAuth);
+// Apply authentication middleware
+app.use(checkAuth);  // This must come after login route
 
 // Admin routes
 const adminRouter = require('./routes/admin/index');
@@ -50,7 +37,7 @@ app.use('/admin', adminRouter);
 
 // Sync database and start the server
 sequelize.sync().then(() => {
-  app.listen(3000, '0.0.0.0', () => {
-    console.log('Admin server started on http://0.0.0.0:4000');
+  app.listen(3000, () => {
+    console.log('Admin server started on http://localhost:4000');
   });
 });
