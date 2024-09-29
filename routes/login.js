@@ -27,7 +27,7 @@ router.post('/', async (req, res) => {
     // Check for NEW_PASSWORD_REQUIRED challenge
     if (data.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
       req.session.challengeSession = data.Session;
-      req.session.username = username;
+      req.session.username = username; // Save the username for the next step
       res.render('newPassword', { username });
     } else {
       const idToken = data.AuthenticationResult.IdToken;
@@ -52,13 +52,18 @@ router.post('/new-password', async (req, res) => {
       USERNAME: req.session.username,
       NEW_PASSWORD: newPassword,
     },
-    Session: req.session.challengeSession,
+    Session: req.session.challengeSession, // Include the session from the first authentication step
   };
 
   try {
+    // Respond to the password change challenge
     const data = await cognito.respondToAuthChallenge(params).promise();
+    
+    // Successfully authenticated with new password
+    const idToken = data.AuthenticationResult.IdToken;
     req.session.isAuthenticated = true;
-    req.session.idToken = data.AuthenticationResult.IdToken;
+    req.session.idToken = idToken;
+    
     res.redirect('/admin');
   } catch (error) {
     console.error('Error setting new password:', error);
