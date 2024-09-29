@@ -1,20 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const cognito = require('../config/cognito');
-const bcrypt = require('bcrypt'); // Not used for authentication anymore
+const cognito = require('../config/cognito'); // Cognito SDK should be properly configured
+const bcrypt = require('bcrypt');
 
-// Render login page
-router.get('/login', (req, res) => {
-  res.render('login');
+// Render the login page (GET /login)
+router.get('/', (req, res) => {
+  console.log('Login page hit!');
+  res.render('login');  // Ensure login.pug exists in your views folder
 });
 
-// Handle login POST request with Cognito
-router.post('/login', async (req, res) => {
+// Handle login (POST /login)
+router.post('/', async (req, res) => {
   const { username, password } = req.body;
 
   const params = {
     AuthFlow: 'USER_PASSWORD_AUTH',
-    ClientId: process.env.COGNITO_CLIENT_ID, // No client secret needed
+    ClientId: process.env.COGNITO_CLIENT_ID,
     AuthParameters: {
       USERNAME: username,
       PASSWORD: password
@@ -22,11 +23,8 @@ router.post('/login', async (req, res) => {
   };
 
   try {
-    // Authenticate with Cognito
     const data = await cognito.initiateAuth(params).promise();
     const idToken = data.AuthenticationResult.IdToken;
-
-    // Store the token in the session for authentication
     req.session.isAuthenticated = true;
     req.session.idToken = idToken;
 
@@ -37,7 +35,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Handle logout
+// Logout
 router.get('/logout', (req, res) => {
   req.session.isAuthenticated = false;
   req.session.idToken = null;
