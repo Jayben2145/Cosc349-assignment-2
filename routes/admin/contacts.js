@@ -5,7 +5,7 @@ const { Contact } = require('../../models');
 // View all contact requests
 router.get('/', async (req, res) => {
   const contacts = await Contact.findAll();
-  res.render('admin/contacts', { contacts });
+  res.render('contacts', { contacts });
 });
 
 // Mark a contact request as contacted

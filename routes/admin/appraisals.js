@@ -5,7 +5,7 @@ const { Appraisal } = require('../../models');
 // View all appraisal requests
 router.get('/', async (req, res) => {
   const appraisals = await Appraisal.findAll();
-  res.render('admin/appraisals', { appraisals });
+  res.render('appraisals', { appraisals });
 });
 
 // Mark an appraisal as contacted

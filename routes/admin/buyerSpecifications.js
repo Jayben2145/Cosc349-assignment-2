@@ -5,7 +5,7 @@ const { BuyerSpecification } = require('../../models');
 // View all buyer specifications
 router.get('/', async (req, res) => {
   const buyerSpecifications = await BuyerSpecification.findAll();
-  res.render('admin/buyerSpecifications', { buyerSpecifications });
+  res.render('buyerSpecifications', { buyerSpecifications });
 });
 
 // Mark a buyer specification as contacted

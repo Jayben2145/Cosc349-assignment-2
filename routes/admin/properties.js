@@ -35,12 +35,12 @@ async function deleteFiles(imagePaths) {
 // View all properties (including hidden ones)
 router.get('/', async (req, res) => {
   const properties = await Property.findAll();  // Show all properties regardless of the display flag
-  res.render('admin/properties', { properties });
+  res.render('properties', { properties });
 });
 
 // View form for adding a new property
 router.get('/add', (req, res) => {
-  res.render('admin/addProperty');
+  res.render('addProperty');
 });
 
 router.post('/add', upload.array('photos', 10), async (req, res) => {
@@ -93,7 +93,7 @@ router.post('/add', upload.array('photos', 10), async (req, res) => {
 router.get('/:id/edit', async (req, res) => {
   const property = await Property.findByPk(req.params.id);
   const images = await PropertyImage.findAll({ where: { propertyId: property.id } });
-  res.render('admin/editProperty', { property, images });
+  res.render('editProperty', { property, images });
 });
 
 router.post('/:id/edit', upload.array('photos', 10), async (req, res) => {
