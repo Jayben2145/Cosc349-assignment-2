@@ -1,3 +1,5 @@
+// /routes/admin/index.js
+
 const express = require('express');
 const router = express.Router();
 
@@ -18,7 +20,7 @@ function checkAuth(req, res, next) {
 
 // Admin dashboard
 router.get('/', checkAuth, (req, res) => {
-  res.render('/dashboard'); // Render admin dashboard
+  res.render('dashboard'); // Corrected view path
 });
 
 // Routes for managing properties
