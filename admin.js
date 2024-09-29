@@ -37,7 +37,7 @@ app.use('/admin', adminRouter);
 
 // Sync database and start the server
 sequelize.sync().then(() => {
-  app.listen(4000, () => {
+  app.listen(3000, () => {
     console.log('Admin server started on http://localhost:4000');
   });
 });

@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    title Real Estate Website
+    link(rel='stylesheet', href='/styles.css')
+  body
+    // Navbar section
+    header.banner
+      nav.navbar
+        ul.navbar-list
+          li.navbar-item
+            a(href=`${NON_ADMIN_URL}/properties`) Properties
+          li.navbar-item
+            a(href=`${NON_ADMIN_URL}/`) Jachary Joseph
+          li.navbar-item.dropdown
+            a(href='#') Contact
+            ul.dropdown-content
+              li
+                a(href=`${NON_ADMIN_URL}/request-appraisal`) Request Appraisal
+              li
+                a(href=`${NON_ADMIN_URL}/buyer-specifications`) Buyer Specs
+              li
+                a(href=`${NON_ADMIN_URL}/contact`) Contact Him
+
+    block content
+
+    include partials/footer
