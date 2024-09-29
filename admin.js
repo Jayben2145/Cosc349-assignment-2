@@ -32,6 +32,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// Redirect root to login page
+app.get('/', (req, res) => {
+  res.redirect('/login');
+});
+
+// Login route
+const loginRouter = require('./routes/login');  // Add login route
+app.use('/login', loginRouter);
+
 // Protect all admin routes with authentication
 app.use(checkAuth);
 
