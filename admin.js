@@ -5,8 +5,11 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
 const { sequelize } = require('./models');
+const checkAuth = require('../middleware/checkAuth')
 
 const app = express();
+
+router.use(checkAuth);
 
 // Set view engine
 app.set('views', path.join(__dirname, 'views'));

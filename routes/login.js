@@ -1,31 +1,38 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const router = express.Router();
-
-// Load the admin password hash from the .env file
-const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+const cognito = require('../config/cognito');
+const bcrypt = require('bcrypt'); // Not used for authentication anymore
 
 // Render login page
 router.get('/login', (req, res) => {
   res.render('login');
 });
 
-// Handle login POST request
+// Handle login POST request with Cognito
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  // Only allow login for the "admin" username (or update for multiple users)
-  if (username === 'admin') {
-    // Compare the provided password with the hash in the .env file
-    const isPasswordCorrect = await bcrypt.compare(password, adminPasswordHash);
-
-    if (isPasswordCorrect) {
-      req.session.isAuthenticated = true;
-      res.redirect('/admin');
-    } else {
-      res.render('login', { error: 'Invalid username or password' });
+  const params = {
+    AuthFlow: 'USER_PASSWORD_AUTH',
+    ClientId: process.env.COGNITO_CLIENT_ID, // No client secret needed
+    AuthParameters: {
+      USERNAME: username,
+      PASSWORD: password
     }
-  } else {
+  };
+
+  try {
+    // Authenticate with Cognito
+    const data = await cognito.initiateAuth(params).promise();
+    const idToken = data.AuthenticationResult.IdToken;
+
+    // Store the token in the session for authentication
+    req.session.isAuthenticated = true;
+    req.session.idToken = idToken;
+
+    res.redirect('/admin');
+  } catch (error) {
+    console.error('Error authenticating:', error);
     res.render('login', { error: 'Invalid username or password' });
   }
 });
@@ -33,6 +40,7 @@ router.post('/login', async (req, res) => {
 // Handle logout
 router.get('/logout', (req, res) => {
   req.session.isAuthenticated = false;
+  req.session.idToken = null;
   res.redirect('/login');
 });
 
