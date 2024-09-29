@@ -3,12 +3,12 @@ const router = express.Router();
 const cognito = require('../config/cognito');
 
 // Render login page
-router.get('/login', (req, res) => {
+router.get('/', (req, res) => {
   res.render('login');
 });
 
 // Handle login POST request with Cognito
-router.post('/login', async (req, res) => {
+router.post('/', async (req, res) => {
   const { username, password } = req.body;
 
   const params = {
