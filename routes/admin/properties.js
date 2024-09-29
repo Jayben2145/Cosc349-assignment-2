@@ -45,7 +45,7 @@ router.get('/add', (req, res) => {
 
 router.post('/add', upload.array('photos', 10), async (req, res) => {
   const { title, description, price, location, display, notes } = req.body;
-  const GOOGLE_API_KEY = 'AIzaSyADRTxHN9jOFcED8b58dIFZWdfUMVe08Zg';  // Replace with your actual Google API Key
+  const GOOGLE_API_KEY = process.env.GOOGLE_MAPS_API_KEY;  // Replace with your actual Google API Key
 
   try {
     // Make a request to the Geocoding API to get the coordinates
