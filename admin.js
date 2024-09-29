@@ -16,6 +16,13 @@ app.set('view engine', 'pug');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  res.locals.NON_ADMIN_URL = process.env.NON_ADMIN_URL;
+  res.locals.ADMIN_URL = process.env.ADMIN_URL;
+  next();
+});
+
+
 // Session middleware
 app.use(session({
   secret: process.env.SESSION_SECRET,
