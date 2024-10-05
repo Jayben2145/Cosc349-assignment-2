@@ -38,7 +38,7 @@ app.use('/contact', contactsRouter);
 
 // Sync database and start server
 sequelize.sync().then(() => {
-  app.listen(3000, () => {
+  app.listen(4000, () => {
     console.log('Front-end server started on http://localhost:3000');
   });
 });
