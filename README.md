@@ -225,8 +225,8 @@ This project is for educational purposes as part of the COSC349 assignment.
 
 ## Contact Information
 For any questions or issues, please contact:
-- **Name**: Your Name
-- **Email**: your.email@example.com
+- **Name**: Jayben Tohill
+- **Email**: Jaybentohill@gmail.com
 
 ## Acknowledgments
 - **Friend's Requirements**: The project is based on guidelines provided by a friend needing a real estate website.
